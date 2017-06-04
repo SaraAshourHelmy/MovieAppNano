@@ -6,7 +6,7 @@ package com.game.movieappNano.utilities;
 
 public class Constant {
 
-    public static final String API_KEY = "2d26e5c941b2e27337a12190d63d3248";
+    public static final String API_KEY = "";
     public static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
 
