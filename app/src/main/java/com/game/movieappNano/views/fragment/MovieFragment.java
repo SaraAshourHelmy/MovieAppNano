@@ -61,7 +61,8 @@ public class MovieFragment extends Fragment implements
         setHasOptionsMenu(true);
         isLand = getResources().getBoolean(R.bool.isLand);
         if (savedInstanceState != null) {
-            mListState = savedInstanceState.getParcelable(STATE_LIST);
+            if (savedInstanceState.containsKey(STATE_LIST))
+                mListState = savedInstanceState.getParcelable(STATE_LIST);
             first = savedInstanceState.getBoolean(STATE_First);
         }
     }
@@ -151,18 +152,19 @@ public class MovieFragment extends Fragment implements
 
     private void setMovieRecycle(ArrayList<Movie> movies) {
 
-        if (movies.size() > 0)
+        if (movies != null && movies.size() > 0) {
             tv_no_data.setVisibility(View.GONE);
-        // set up recycler view adapter
-        MovieAdapter adapter = new MovieAdapter(movies, MovieFragment.this);
-        if (isLand)
-            layoutManager = new GridLayoutManager(getContext(), 4);
-        else
-            layoutManager = new GridLayoutManager(getContext(), 3);
-        if (mListState != null)
-            layoutManager.onRestoreInstanceState(mListState);
-        mRecyclerMovie.setLayoutManager(layoutManager);
-        mRecyclerMovie.setAdapter(adapter);
+            // set up recycler view adapter
+            MovieAdapter adapter = new MovieAdapter(movies, MovieFragment.this);
+            if (isLand)
+                layoutManager = new GridLayoutManager(getContext(), 4);
+            else
+                layoutManager = new GridLayoutManager(getContext(), 3);
+            if (mListState != null)
+                layoutManager.onRestoreInstanceState(mListState);
+            mRecyclerMovie.setLayoutManager(layoutManager);
+            mRecyclerMovie.setAdapter(adapter);
+        }
 
     }
 
@@ -222,8 +224,10 @@ public class MovieFragment extends Fragment implements
         super.onSaveInstanceState(outState);
         outState.putString(STATE_MOVIE, state);
         outState.putBoolean(STATE_First, false);
-        mListState = layoutManager.onSaveInstanceState();
-        outState.putParcelable(STATE_LIST, mListState);
+        if (layoutManager != null) {
+            mListState = layoutManager.onSaveInstanceState();
+            outState.putParcelable(STATE_LIST, mListState);
+        }
 
     }
 
@@ -233,11 +237,4 @@ public class MovieFragment extends Fragment implements
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mListState != null)
-            layoutManager.onRestoreInstanceState(mListState);
-
-    }
 }

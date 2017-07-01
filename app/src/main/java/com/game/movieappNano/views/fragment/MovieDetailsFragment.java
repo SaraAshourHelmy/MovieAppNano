@@ -33,6 +33,7 @@ import com.game.movieappNano.network.utilities.VolleyResponse;
 import com.game.movieappNano.utilities.Constant;
 import com.game.movieappNano.utilities.DialogUtility;
 import com.game.movieappNano.utilities.IntentUtility;
+import com.game.movieappNano.utilities.NetWorkUtility;
 import com.game.movieappNano.views.adapter.ReviewAdapter;
 import com.game.movieappNano.views.adapter.TrailerAdapter;
 import com.squareup.picasso.Picasso;
@@ -96,8 +97,14 @@ public class MovieDetailsFragment extends Fragment implements TrailerAdapter.Rec
         Picasso.with(getContext()).load(imgURL).placeholder(R.drawable.loading)
                 .into(imgV_poster);
 
-        getTrailer();
-        getReviews();
+        if(NetWorkUtility.checkInternetConnection(getContext())) {
+            getTrailer();
+            getReviews();
+        }
+        else
+        {
+            DialogUtility.showMessageDialog(getContext(),getString(R.string.no_internet));
+        }
         checkFavorite();
         btn_fav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
