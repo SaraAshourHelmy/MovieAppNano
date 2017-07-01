@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -15,7 +16,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/movie_details_margin" />
+            android:layout_marginTop="@dimen/movie_details_margin"
+            android:fontFamily="sans-serif-large"
+            android:textColor="@color/color_black"
+            android:textStyle="bold"
+            tools:text="Movie title" />
 
         <ImageView
             android:id="@+id/imgV_detailsPoster"
@@ -29,21 +34,55 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="@dimen/movie_details_margin" />
+            android:layout_margin="@dimen/movie_details_margin"
+            android:fontFamily="sans-serif-regular"
+            tools:text="This is overview about this movie i hope to be useful" />
 
         <TextView
             android:id="@+id/tv_movieVote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/movie_details_margin" />
+            android:layout_marginTop="@dimen/movie_details_margin"
+            android:fontFamily="sans-serif-regular" />
 
         <TextView
             android:id="@+id/tv_movieReleaseDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/movie_details_margin" />
+            android:layout_marginTop="@dimen/movie_details_margin"
+            android:fontFamily="sans-serif-regular" />
+
+        <ToggleButton
+            android:id="@+id/btn_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_unfav"
+            android:checked="false"
+            android:textOff=""
+            android:textOn="" />
+
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/layout_trailer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            layout="@layout/layout_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </ScrollView>

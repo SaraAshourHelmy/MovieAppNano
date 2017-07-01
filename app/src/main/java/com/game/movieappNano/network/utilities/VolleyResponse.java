@@ -1,6 +1,8 @@
 package com.game.movieappNano.network.utilities;
 
 import com.game.movieappNano.models.Movie;
+import com.game.movieappNano.models.Review;
+import com.game.movieappNano.models.Trailer;
 
 import java.util.ArrayList;
 
@@ -10,7 +12,26 @@ import java.util.ArrayList;
 
 public interface VolleyResponse {
 
-    void onResponse(ArrayList<Movie> movies);
+    void onResponse(String response);
 
     void onError(String errorMsg);
+
+    interface MovieResponse {
+
+        void onResponse(ArrayList<Movie> movies);
+
+        void onError(String errorMsg);
+    }
+
+    interface TrailerResponse {
+        void onResponse(ArrayList<Trailer> trailers);
+
+        void onError(String errorMsg);
+    }
+
+    interface ReviewsResponse {
+        void onResponse(ArrayList<Review> reviews);
+
+        void onError(String errorMsg);
+    }
 }

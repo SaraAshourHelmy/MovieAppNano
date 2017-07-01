@@ -36,4 +36,10 @@ dependencies {
 
     // for picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // for constraint layout
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // for Gson
+    compile 'com.google.code.gson:gson:2.8.0'
 }

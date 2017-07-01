@@ -62,6 +62,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder> {
             Picasso.with(img_movie.getContext()).
                     load(lstMovies.get(getAdapterPosition()).getImgURL())
                     .placeholder(R.drawable.loading)
+                    .error(R.drawable.loading_error)
                     .into(img_movie);
         }
 

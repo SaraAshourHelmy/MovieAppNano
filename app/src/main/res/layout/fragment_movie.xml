@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/movie_details_margin"
     tools:context="com.game.movieappNano.views.fragment.MovieFragment">
 
     <!-- Recycler View -->
@@ -10,6 +12,16 @@
         android:id="@+id/rv_movies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"></android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="5dp"></android.support.v7.widget.RecyclerView>
+        android:text="@string/no_fav_data"
+        android:visibility="gone" />
+
+
 </RelativeLayout>

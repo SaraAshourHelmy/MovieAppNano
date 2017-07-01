@@ -1,12 +1,19 @@
 package com.game.movieappNano.network.utilities;
 
+import android.util.Log;
+
 import com.game.movieappNano.models.Movie;
+import com.game.movieappNano.models.Review;
+import com.game.movieappNano.models.Trailer;
 import com.game.movieappNano.utilities.Constant;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -40,5 +47,37 @@ public class Parsing {
             e.printStackTrace();
         }
         return lstMovies;
+    }
+
+    public static ArrayList<Trailer> parseTrailer(String json) {
+        ArrayList<Trailer> trailers = new ArrayList<>();
+        try {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Trailer>>() {
+            }.getType();
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+            trailers = gson.fromJson(jsonArray.toString(), type);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return trailers;
+    }
+
+    public static ArrayList<Review> parseReviews(String json) {
+        ArrayList<Review> reviews = new ArrayList<>();
+        try {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Review>>() {
+            }.getType();
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+            reviews = gson.fromJson(jsonArray.toString(), type);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return reviews;
     }
 }

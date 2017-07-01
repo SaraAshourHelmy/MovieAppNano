@@ -10,4 +10,9 @@
         android:id="@+id/menu_rated"
         android:title="@string/rated"
         app:showAsAction="never"></item>
+
+    <item
+        android:id="@+id/menu_favorite"
+        android:title="@string/favorite"
+        app:showAsAction="never"></item>
 </menu>
