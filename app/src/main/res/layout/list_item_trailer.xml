@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_selector"
+    android:orientation="vertical"
+    android:padding="@dimen/list_item_padding">
+
+    <ImageView
+        android:id="@+id/imgV_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:textColor="@color/color_black"
+        android:id="@+id/tv_trailerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_item_padding"
+        app:layout_constraintBottom_toTopOf="@+id/imgV_play"
+        app:layout_constraintLeft_toRightOf="@+id/imgV_play"
+        app:layout_constraintTop_toBottomOf="@+id/imgV_play"
+        android:text="Trailer of video"
+        android:layout_marginStart="@dimen/list_item_padding" />
+
+
+</android.support.constraint.ConstraintLayout>
