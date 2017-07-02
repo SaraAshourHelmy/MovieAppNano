@@ -11,6 +11,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,12 +59,14 @@ public class MovieFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("onCreate", "True");
         setHasOptionsMenu(true);
         isLand = getResources().getBoolean(R.bool.isLand);
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(STATE_LIST))
                 mListState = savedInstanceState.getParcelable(STATE_LIST);
             first = savedInstanceState.getBoolean(STATE_First);
+            state = savedInstanceState.getString(STATE_MOVIE);
         }
     }
 
@@ -83,6 +86,7 @@ public class MovieFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.e("onViewCreate", "True");
         mRecyclerMovie = (RecyclerView) view.findViewById(R.id.rv_movies);
         tv_no_data = (TextView) view.findViewById(R.id.tv_no_data);
 
@@ -146,25 +150,22 @@ public class MovieFragment extends Fragment implements
         DialogUtility.dismissProgressDialog();
         lstMovie = movies;
         setMovieRecycle(movies);
-
     }
-
 
     private void setMovieRecycle(ArrayList<Movie> movies) {
 
-        if (movies != null && movies.size() > 0) {
+        if (movies != null && movies.size() > 0)
             tv_no_data.setVisibility(View.GONE);
-            // set up recycler view adapter
-            MovieAdapter adapter = new MovieAdapter(movies, MovieFragment.this);
-            if (isLand)
-                layoutManager = new GridLayoutManager(getContext(), 4);
-            else
-                layoutManager = new GridLayoutManager(getContext(), 3);
-            if (mListState != null)
-                layoutManager.onRestoreInstanceState(mListState);
-            mRecyclerMovie.setLayoutManager(layoutManager);
-            mRecyclerMovie.setAdapter(adapter);
-        }
+        // set up recycler view adapter
+        MovieAdapter adapter = new MovieAdapter(movies, MovieFragment.this);
+        if (isLand)
+            layoutManager = new GridLayoutManager(getContext(), 4);
+        else
+            layoutManager = new GridLayoutManager(getContext(), 3);
+        if (mListState != null)
+            layoutManager.onRestoreInstanceState(mListState);
+        mRecyclerMovie.setLayoutManager(layoutManager);
+        mRecyclerMovie.setAdapter(adapter);
 
     }
 
@@ -180,6 +181,7 @@ public class MovieFragment extends Fragment implements
         Intent moveToDetailsIntent = new Intent(getContext(), MovieDetailsActivity.class);
         moveToDetailsIntent.putExtra(MOVIE, movie);
         startActivity(moveToDetailsIntent);
+        first = false;
 
     }
 
@@ -191,33 +193,32 @@ public class MovieFragment extends Fragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (!state.equals(Constant.movieType.Favorite.name().toString().toLowerCase()))
-            getLoaderManager().destroyLoader(LOADER_ID);
-        else {
-            ArrayList<Movie> lstMovies = new ArrayList<>();
-            Movie movie;
-            while (data.moveToNext()) {
-                movie = new Movie();
-                movie.setId(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry._ID)));
-                movie.setOriginalTitle(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_TITLE)));
-                movie.setOverview(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_OVERVIEW)));
-                movie.setImgURL(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_IMAGE_URL)));
-                movie.setReleaseDate(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_RELEASE_DATE)));
-                movie.setVoteAverage(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_VOTE)));
-                lstMovies.add(movie);
-            }
-            DialogUtility.dismissProgressDialog();
-            if (lstMovies.size() == 0)
-                tv_no_data.setVisibility(View.VISIBLE);
-            this.lstMovie = lstMovies;
-            setMovieRecycle(lstMovies);
+
+        ArrayList<Movie> lstMovies = new ArrayList<>();
+        Movie movie;
+        while (data.moveToNext()) {
+            movie = new Movie();
+            movie.setId(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry._ID)));
+            movie.setOriginalTitle(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_TITLE)));
+            movie.setOverview(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_OVERVIEW)));
+            movie.setImgURL(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_IMAGE_URL)));
+            movie.setReleaseDate(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_RELEASE_DATE)));
+            movie.setVoteAverage(data.getString(data.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_VOTE)));
+            lstMovies.add(movie);
         }
+        DialogUtility.dismissProgressDialog();
+        if (lstMovies.size() == 0)
+            tv_no_data.setVisibility(View.VISIBLE);
+        this.lstMovie = lstMovies;
+        setMovieRecycle(lstMovies);
+        getLoaderManager().destroyLoader(LOADER_ID);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -228,13 +229,7 @@ public class MovieFragment extends Fragment implements
             mListState = layoutManager.onSaveInstanceState();
             outState.putParcelable(STATE_LIST, mListState);
         }
-
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-    }
 
 }
