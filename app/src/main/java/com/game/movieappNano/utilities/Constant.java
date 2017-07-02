@@ -8,7 +8,7 @@ import android.net.Uri;
 
 public class Constant {
 
-    public static final String API_KEY = "";
+    public static final String API_KEY = "2d26e5c941b2e27337a12190d63d3248";
     public static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
     public static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
     public static final String QUERY_KEY = "api_key";

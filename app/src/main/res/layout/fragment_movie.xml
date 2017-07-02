@@ -10,7 +10,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_movies"
-        android:layout_width="wrap_content"
+        adjustViewBounds="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"></android.support.v7.widget.RecyclerView>

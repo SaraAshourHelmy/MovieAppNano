@@ -3,6 +3,7 @@ package com.game.movieappNano.views.fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -42,6 +43,13 @@ public class MovieFragment extends Fragment implements
     public static final int LOADER_ID = 300;
     public String state = Constant.movieType.POPULAR.toString().toLowerCase();
     public static final String STATE_MOVIE = "state";
+    public static final String STATE_LIST = "state_list";
+    public static final String STATE_First = "first";
+    private GridLayoutManager layoutManager;
+    private Parcelable mListState;
+    public static ArrayList<Movie> lstMovie;
+    private boolean first = true, isLand;
+
 
     public MovieFragment() {
         // Required empty public constructor
@@ -51,9 +59,10 @@ public class MovieFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_MOVIE)) {
-            state = savedInstanceState.getString(STATE_MOVIE);
-            savedInstanceState.clear();
+        isLand = getResources().getBoolean(R.bool.isLand);
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(STATE_LIST);
+            first = savedInstanceState.getBoolean(STATE_First);
         }
     }
 
@@ -75,10 +84,11 @@ public class MovieFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         mRecyclerMovie = (RecyclerView) view.findViewById(R.id.rv_movies);
         tv_no_data = (TextView) view.findViewById(R.id.tv_no_data);
-        if (!state.equals(Constant.movieType.Favorite.toString().toLowerCase()))
+
+        if (first)
             getMovies(state);
         else
-            getFavorite();
+            setMovieRecycle(lstMovie);
     }
 
     @Override
@@ -133,6 +143,7 @@ public class MovieFragment extends Fragment implements
     public void onResponse(ArrayList<Movie> movies) {
 
         DialogUtility.dismissProgressDialog();
+        lstMovie = movies;
         setMovieRecycle(movies);
 
     }
@@ -144,9 +155,15 @@ public class MovieFragment extends Fragment implements
             tv_no_data.setVisibility(View.GONE);
         // set up recycler view adapter
         MovieAdapter adapter = new MovieAdapter(movies, MovieFragment.this);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        if (isLand)
+            layoutManager = new GridLayoutManager(getContext(), 4);
+        else
+            layoutManager = new GridLayoutManager(getContext(), 3);
+        if (mListState != null)
+            layoutManager.onRestoreInstanceState(mListState);
         mRecyclerMovie.setLayoutManager(layoutManager);
         mRecyclerMovie.setAdapter(adapter);
+
     }
 
     @Override
@@ -190,6 +207,7 @@ public class MovieFragment extends Fragment implements
             DialogUtility.dismissProgressDialog();
             if (lstMovies.size() == 0)
                 tv_no_data.setVisibility(View.VISIBLE);
+            this.lstMovie = lstMovies;
             setMovieRecycle(lstMovies);
         }
     }
@@ -203,5 +221,23 @@ public class MovieFragment extends Fragment implements
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(STATE_MOVIE, state);
+        outState.putBoolean(STATE_First, false);
+        mListState = layoutManager.onSaveInstanceState();
+        outState.putParcelable(STATE_LIST, mListState);
+
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mListState != null)
+            layoutManager.onRestoreInstanceState(mListState);
+
     }
 }
